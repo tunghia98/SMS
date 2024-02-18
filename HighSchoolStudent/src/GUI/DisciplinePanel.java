@@ -4,33 +4,22 @@
  */
 package GUI;
 
-
 import BUS.DisciplineBUS;
 import BUS.DiscliproroleBUS;
 import DTO.Discipline;
 import DTO.Discliprorole;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileOutputStream;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class DisciplinePanel extends javax.swing.JPanel {
 
     DisciplineBUS disBUS = new DisciplineBUS();
     DiscliproroleBUS disroleBUS = new DiscliproroleBUS();
-
     public DisciplinePanel() {
         initComponents();
-
+        
         loadDataTable();
         loadDataRoleTable();
     }
@@ -52,7 +41,6 @@ public class DisciplinePanel extends javax.swing.JPanel {
             model.addRow(dataRow);
         }
     }
-
     public void loadDataRoleTable() {
         DefaultTableModel model = (DefaultTableModel) disRoleList.getModel();
         model.setRowCount(0); // xóa table 
@@ -63,7 +51,6 @@ public class DisciplinePanel extends javax.swing.JPanel {
             model.addRow(dataRow);
         }
     }
-
     public Discipline getdisModel() {
         Discipline dis = new Discipline();
         String Dis_ID = txtRole.getText();
@@ -74,13 +61,11 @@ public class DisciplinePanel extends javax.swing.JPanel {
         dis.setDis_Score(Float.parseFloat(Dis_Score));
         return dis;
     }
-
     public void setdisModel(Discipline dis) {
         txtRole.setText(dis.getDis_ID());
         txtContent.setText(dis.getDis_Content());
         txtScore.setText(String.valueOf(dis.getDis_Score()));
     }
-
     public Discliprorole getdisroleModel() {
         Discliprorole disrole = new Discliprorole();
         String RoleID = txtdisRole.getText();
@@ -89,21 +74,19 @@ public class DisciplinePanel extends javax.swing.JPanel {
         disrole.setRoleContent(DisContent);
         return disrole;
     }
-
     public void setdisroleModel(Discliprorole disrole) {
         txtdisRole.setText(disrole.getRoleID());
         txtdisContent.setText(disrole.getRoleContent());
     }
-
     public boolean validatedisForm() {
-        if (txtRole.getText().isEmpty()) {
+        if(txtRole.getText().isEmpty()) {
             return false;
         }
         return true;
     }
-
+    
     public boolean validatedisroleForm() {
-        if (txtdisRole.getText().isEmpty()) {
+        if(txtdisRole.getText().isEmpty()) {
             return false;
         }
         return true;
@@ -137,7 +120,6 @@ public class DisciplinePanel extends javax.swing.JPanel {
         Btnshowdis = new javax.swing.JButton();
         btneditdis = new javax.swing.JButton();
         btndeletedis = new javax.swing.JButton();
-        btnExportDisList = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         DisList = new javax.swing.JTable();
@@ -146,7 +128,6 @@ public class DisciplinePanel extends javax.swing.JPanel {
         btnshowdisrole = new javax.swing.JButton();
         btneditdisrole = new javax.swing.JButton();
         btndeletedisrole = new javax.swing.JButton();
-        btnExportDisRoleList = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         disRoleList = new javax.swing.JTable();
@@ -401,13 +382,6 @@ public class DisciplinePanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportDisList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportDisList.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportDisListActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -419,8 +393,6 @@ public class DisciplinePanel extends javax.swing.JPanel {
                 .addComponent(btneditdis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btndeletedis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportDisList, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -429,9 +401,8 @@ public class DisciplinePanel extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btndeletedis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btneditdis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Btnshowdis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExportDisList, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 10, Short.MAX_VALUE))
+                    .addComponent(Btnshowdis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Danh sách"));
@@ -458,16 +429,11 @@ public class DisciplinePanel extends javax.swing.JPanel {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1016, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 8, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -527,13 +493,6 @@ public class DisciplinePanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportDisRoleList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportDisRoleList.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportDisRoleListActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -545,8 +504,6 @@ public class DisciplinePanel extends javax.swing.JPanel {
                 .addComponent(btneditdisrole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btndeletedisrole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportDisRoleList, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -555,9 +512,8 @@ public class DisciplinePanel extends javax.swing.JPanel {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btndeletedisrole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btneditdisrole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnshowdisrole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExportDisRoleList, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 10, Short.MAX_VALUE))
+                    .addComponent(btnshowdisrole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Danh sách"));
@@ -584,16 +540,11 @@ public class DisciplinePanel extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1016, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane3)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 8, Short.MAX_VALUE))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -603,10 +554,10 @@ public class DisciplinePanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 800, Short.MAX_VALUE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -615,7 +566,7 @@ public class DisciplinePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -638,7 +589,7 @@ public class DisciplinePanel extends javax.swing.JPanel {
         DisDialog.setLocationRelativeTo(null);
         addDisBtn.setVisible(false);
         editDisBtn.setVisible(true);
-        DisDialog.setVisible(true);
+        DisDialog.setVisible(true);   
     }//GEN-LAST:event_btneditdisActionPerformed
 
     private void btneditdisroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditdisroleActionPerformed
@@ -694,7 +645,7 @@ public class DisciplinePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_adddisRoleBtnActionPerformed
 
     private void btnEsc1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEsc1ActionPerformed
-        RoledisDialog.setVisible(false);
+      RoledisDialog.setVisible(false); 
     }//GEN-LAST:event_btnEsc1ActionPerformed
 
     private void editdisRoleBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editdisRoleBtnActionPerformed
@@ -719,20 +670,20 @@ public class DisciplinePanel extends javax.swing.JPanel {
         DisDialog.setLocationRelativeTo(null);
         addDisBtn.setVisible(true);
         editDisBtn.setVisible(false);
-        DisDialog.setVisible(true);
+        DisDialog.setVisible(true);   
     }//GEN-LAST:event_BtnshowdisActionPerformed
 
     private void btndeletedisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeletedisActionPerformed
-        if (validatedisForm()) {
+        if(validatedisForm()) {
             Discipline dis = getdisModel();
-            if (disBUS.deleteDiscipline(dis.getDis_ID())) {
+            if(disBUS.deleteDiscipline(dis.getDis_ID())) {
                 JOptionPane.showMessageDialog(this, "Xóa thành công");
                 loadDataTable();
             } else {
                 JOptionPane.showMessageDialog(this, "Xóa thất bại");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần xóa");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần xóa");      
         }
         loadDataTable();
     }//GEN-LAST:event_btndeletedisActionPerformed
@@ -745,101 +696,19 @@ public class DisciplinePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_disRoleListMouseClicked
 
     private void btndeletedisroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeletedisroleActionPerformed
-        if (validatedisroleForm()) {
+        if(validatedisroleForm()) {
             Discliprorole disrole = getdisroleModel();
-            if (disroleBUS.deleteDiscliprorole(disrole.getRoleID())) {
+            if(disroleBUS.deleteDiscliprorole(disrole.getRoleID())) {
                 JOptionPane.showMessageDialog(this, "Xóa thành công");
                 loadDataTable();
             } else {
                 JOptionPane.showMessageDialog(this, "Xóa thất bại");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần xóa");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần xóa");      
         }
         loadDataRoleTable();
     }//GEN-LAST:event_btndeletedisroleActionPerformed
-
-    // Hàm mở file
-    public void openFile(String file) {
-        try {
-            File path = new File(file);
-            Desktop.getDesktop().open(path);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-    private void btnExportDisListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportDisListActionPerformed
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Kỷ luật");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < DisList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(DisList.getColumnName(i));
-                }
-                for (int i = 0; i < DisList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < DisList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (DisList.getValueAt(i, j) != null) {
-                            cell.setCellValue(DisList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportDisListActionPerformed
-
-    private void btnExportDisRoleListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportDisRoleListActionPerformed
-        // TODO add your handling code here:
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Mục kỷ luật");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < disRoleList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(disRoleList.getColumnName(i));
-                }
-                for (int i = 0; i < disRoleList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < disRoleList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (disRoleList.getValueAt(i, j) != null) {
-                            cell.setCellValue(disRoleList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportDisRoleListActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -851,8 +720,6 @@ public class DisciplinePanel extends javax.swing.JPanel {
     private javax.swing.JButton adddisRoleBtn;
     private javax.swing.JButton btnEsc;
     private javax.swing.JButton btnEsc1;
-    private javax.swing.JButton btnExportDisList;
-    private javax.swing.JButton btnExportDisRoleList;
     private javax.swing.JButton btndeletedis;
     private javax.swing.JButton btndeletedisrole;
     private javax.swing.JButton btneditdis;

@@ -67,14 +67,14 @@ public class MarkDAO extends DatabaseConnection {
         return result;
     }
 
-    public boolean editmark(Mark mark, String teacherID) {
+    public boolean editmark(Mark mark) {
         boolean result = false;
         open();
-        String sql = "UPDATE Student_Mark_Subject SET mark_1 = ?,mark_2 = ?,mark_15 = ?,mark_45 = ?,mark_end = ?,mark_avg = ? WHERE std_id = ? AND teacher_id =?";
+        String sql = "UPDATE STUDENT SET mark_1 = ?,mark_2 = ?,mark_15 = ?,mark_45 = ?,mark_end = ?,mark_avg = ? WHERE std_id = ? AND teacher_id =?";
         try {
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(7, mark.getStudentID());
-            pstm.setString(8, teacherID);
+            pstm.setString(8, mark.getTeacherId());
             pstm.setFloat(1, mark.getMark_1());
             pstm.setFloat(2, mark.getMark_2());
             pstm.setFloat(3, mark.getMark_15());

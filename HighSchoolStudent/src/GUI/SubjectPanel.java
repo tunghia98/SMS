@@ -8,15 +8,6 @@ import BUS.SubjectBUS;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import DTO.Subject;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileOutputStream;
-import javax.swing.JFileChooser;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -66,11 +57,11 @@ public class SubjectPanel extends javax.swing.JPanel {
         btnShowSubjectDialog = new javax.swing.JButton();
         btnShowEditSubjectDialog = new javax.swing.JButton();
         deleteSubjectBtn = new javax.swing.JButton();
-        btnExportSubject = new javax.swing.JButton();
 
         InputSubjectDialog.setMinimumSize(new java.awt.Dimension(344, 450));
         InputSubjectDialog.setModal(true);
         InputSubjectDialog.setUndecorated(true);
+        InputSubjectDialog.setPreferredSize(new java.awt.Dimension(344, 450));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin môn học", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
 
@@ -254,13 +245,6 @@ public class SubjectPanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportSubject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportSubject.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportSubjectActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -272,20 +256,16 @@ public class SubjectPanel extends javax.swing.JPanel {
                 .addComponent(btnShowEditSubjectDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(deleteSubjectBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportSubject, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnExportSubject, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(deleteSubjectBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnShowSubjectDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnShowEditSubjectDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(deleteSubjectBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnShowSubjectDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnShowEditSubjectDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -296,10 +276,10 @@ public class SubjectPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -359,11 +339,7 @@ public class SubjectPanel extends javax.swing.JPanel {
 
     public Subject getModel() {
         Subject subject = new Subject();
-        if (txtSubjectID.getText().startsWith("MH")) {
-            subject.setSubjectID(txtSubjectID.getText());
-        } else {
-            JOptionPane.showMessageDialog(this, "Mã môn học phải bắt đầu bằng MH - VD: MH00x");
-        }
+        subject.setSubjectID(txtSubjectID.getText());
         subject.setSubjectName(txtSubjectName.getText());
         subject.setCoefficient(Integer.parseInt(txtCoefficient.getText()));
         subject.setNumberOfLesson(Integer.parseInt(txtNumberOfLesson.getText()));
@@ -405,7 +381,7 @@ public class SubjectPanel extends javax.swing.JPanel {
     // xóa môn học
     private void deleteSubjectBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSubjectBtnActionPerformed
         // TODO add your handling code here:
-        if (validateForm()) {
+        if(validateForm()) {
             Subject subject = getModel();
             if (subjectBUS.deleteSubject(subject)) {
                 JOptionPane.showMessageDialog(this, "Xóa thành công");
@@ -416,7 +392,7 @@ public class SubjectPanel extends javax.swing.JPanel {
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn môn học cần xóa");
         }
-
+        
     }//GEN-LAST:event_deleteSubjectBtnActionPerformed
 
     // ấn chọn môn học trên danh sách
@@ -453,66 +429,14 @@ public class SubjectPanel extends javax.swing.JPanel {
     // sửa môn học
     private void btnEditSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditSubjectActionPerformed
         // TODO add your handling code here:
-        if (validateForm()) {
-            Subject subject = getModel();
-            if (subjectBUS.editSubject(subject)) {
-                JOptionPane.showMessageDialog(this, "Sửa thành công");
-                loadDataTable();
-            } else {
-                JOptionPane.showMessageDialog(this, "Sửa thất bại");
-            }
+        Subject subject = getModel();
+        if (subjectBUS.editSubject(subject)) {
+            JOptionPane.showMessageDialog(this, "Sửa thành công");
+            loadDataTable();
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin");
+            JOptionPane.showMessageDialog(this, "Sửa thất bại");
         }
-
     }//GEN-LAST:event_btnEditSubjectActionPerformed
-
-    // Hàm mở file
-    public void openFile(String file) {
-        try {
-            File path = new File(file);
-            Desktop.getDesktop().open(path);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    // hàm export danh sách môn học
-    private void btnExportSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportSubjectActionPerformed
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Học Sinh");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < subjectList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(subjectList.getColumnName(i));
-                }
-                for (int i = 0; i < subjectList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < subjectList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (subjectList.getValueAt(i, j) != null) {
-                            cell.setCellValue(subjectList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportSubjectActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -520,7 +444,6 @@ public class SubjectPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnAddSubject;
     private javax.swing.JButton btnEditSubject;
     private javax.swing.JButton btnEsc;
-    private javax.swing.JButton btnExportSubject;
     private javax.swing.JButton btnShowEditSubjectDialog;
     private javax.swing.JButton btnShowSubjectDialog;
     private javax.swing.JButton deleteSubjectBtn;

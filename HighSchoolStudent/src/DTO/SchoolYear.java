@@ -60,11 +60,6 @@ public class SchoolYear {
         this.endDate = endDate;
     }
 
-    @Override
-    public String toString() {
-        return "SchoolYear{" + "schoolYearID=" + schoolYearID + ", schoolYearName=" + schoolYearName + ", startDate=" + startDate + ", endDate=" + endDate + '}';
-    }
-
     
     
 }

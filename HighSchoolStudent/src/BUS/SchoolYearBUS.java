@@ -18,7 +18,7 @@ public class SchoolYearBUS {
 
     public boolean addSchoolYear(SchoolYear schoolYear) {
         for (SchoolYear sc : schoolYearDAO.getAllSchoolYear()) {
-            if (sc.getSchoolYearName().equals(schoolYear)) {
+            if (sc.getSchoolYearName().equals(schoolYear) || sc.getStartDate().equals(schoolYear.getStartDate()) || sc.getEndDate().equals(schoolYear.getEndDate())) {
                 return false;
             }
         }
@@ -52,16 +52,12 @@ public class SchoolYearBUS {
     }
 
     public boolean editSchoolYear(SchoolYear schoolYear) {
-        return schoolYearDAO.editSchoolYear(schoolYear);
-    }
-    
-    public boolean checkDublicate(SchoolYear sc) {
-        for(SchoolYear schoolYear : schoolYearDAO.getAllSchoolYear()) {
-            if(sc.getSchoolYearID().equals(schoolYear.getSchoolYearID())) {
-                return true;
+        for (SchoolYear sc : schoolYearDAO.getAllSchoolYear()) {
+            if (sc.getSchoolYearName().equals(schoolYear) || sc.getStartDate().equals(schoolYear.getStartDate()) || sc.getEndDate().equals(schoolYear.getEndDate())) {
+                return false;
             }
         }
-        return false;
+        return schoolYearDAO.editSchoolYear(schoolYear);
     }
 
 }

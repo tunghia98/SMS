@@ -1,15 +1,8 @@
 package GUI;
-
 import BUS.SchoolYearBUS;
 import BUS.SemesterBUS;
 import DTO.SchoolYear;
 import DTO.Semester;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import javax.swing.JOptionPane;
 import java.sql.Date;
 import java.text.ParseException;
@@ -17,17 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class SchoolYearPanel extends javax.swing.JPanel {
 
@@ -81,7 +64,6 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         btnShowEditSemesterDialog = new javax.swing.JButton();
         btnDeleteSemester = new javax.swing.JButton();
         btnShowSemesterDialog = new javax.swing.JButton();
-        btnExportExcelSemester = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         semesterList = new javax.swing.JTable();
@@ -93,7 +75,6 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         btnShowSchoolYearDialog = new javax.swing.JButton();
         btnShowEditSchoolYearDialog = new javax.swing.JButton();
         btnDeleteSchoolYear = new javax.swing.JButton();
-        btnExportExcelSchoolYear = new javax.swing.JButton();
 
         InputSchoolYearDialog.setMinimumSize(new java.awt.Dimension(315, 378));
         InputSchoolYearDialog.setModal(true);
@@ -352,7 +333,6 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         jPanel3.setPreferredSize(new java.awt.Dimension(1050, 600));
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Thao tác"));
-        jPanel8.setPreferredSize(new java.awt.Dimension(394, 89));
 
         btnShowEditSemesterDialog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Edit.png"))); // NOI18N
         btnShowEditSemesterDialog.addActionListener(new java.awt.event.ActionListener() {
@@ -375,13 +355,6 @@ public class SchoolYearPanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportExcelSemester.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportExcelSemester.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportExcelSemesterActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -393,20 +366,16 @@ public class SchoolYearPanel extends javax.swing.JPanel {
                 .addComponent(btnShowEditSemesterDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnDeleteSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportExcelSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnExportExcelSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnShowEditSemesterDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(btnDeleteSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnShowSemesterDialog, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnShowEditSemesterDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnDeleteSemester, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnShowSemesterDialog, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(0, 5, Short.MAX_VALUE))
         );
 
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Danh sách học kỳ"));
@@ -434,7 +403,7 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1016, Short.MAX_VALUE)
                 .addContainerGap())
@@ -442,7 +411,8 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -453,10 +423,10 @@ public class SchoolYearPanel extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -465,7 +435,7 @@ public class SchoolYearPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -506,7 +476,8 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
 
@@ -535,13 +506,6 @@ public class SchoolYearPanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportExcelSchoolYear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportExcelSchoolYear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportExcelSchoolYearActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -553,8 +517,6 @@ public class SchoolYearPanel extends javax.swing.JPanel {
                 .addComponent(btnShowEditSchoolYearDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnDeleteSchoolYear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportExcelSchoolYear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -563,8 +525,7 @@ public class SchoolYearPanel extends javax.swing.JPanel {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnShowEditSchoolYearDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeleteSchoolYear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnShowSchoolYearDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExportExcelSchoolYear, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnShowSchoolYearDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -575,10 +536,10 @@ public class SchoolYearPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -633,7 +594,7 @@ public class SchoolYearPanel extends javax.swing.JPanel {
             model.addRow(dataRow);
         }
     }
-
+    
     public void LoadComboboxSchoolYear() {
         DefaultComboBoxModel comboSchoolYear = new DefaultComboBoxModel();
         comboSchoolYear.addElement("");
@@ -645,11 +606,7 @@ public class SchoolYearPanel extends javax.swing.JPanel {
 
     public SchoolYear getSchoolYearModel() {
         SchoolYear schoolYear = new SchoolYear();
-        if (txtSchoolYearID.getText().startsWith("NH")) {
-            schoolYear.setSchoolYearID(txtSchoolYearID.getText());
-        } else {
-            JOptionPane.showMessageDialog(this, "Mã năm học phải bắt đầu bằng NH - Ví dụ NH1920 - tương đương năm học 2019 - 2020");
-        }        
+        schoolYear.setSchoolYearID(txtSchoolYearID.getText());
         schoolYear.setSchoolYearName(txtSchoolYearName.getText());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String startDate = sdf.format(csStartDate.getDate());
@@ -701,6 +658,13 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         setSchoolYearModel(schoolYear);
     }//GEN-LAST:event_schoolYearListMouseClicked
 
+    public boolean validateFormSchoolYear() {
+        if (txtSchoolYearID.getText().isEmpty() || txtSchoolYearName.getText().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
     // Hiển thị form sửa năm học
     private void btnShowEditSchoolYearDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowEditSchoolYearDialogActionPerformed
         if (validateFormSchoolYear()) {
@@ -709,7 +673,7 @@ public class SchoolYearPanel extends javax.swing.JPanel {
             btnEditSchoolYear.setVisible(true);
             txtSchoolYearID.enable(false);
             InputSchoolYearDialog.setVisible(true);
-
+            
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn năm học cần sửa");
 
@@ -809,10 +773,9 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         txtSemesterID.setText("");
         txtSemesterName.setText("");
     }
-
     // hiển thị form nhập học kỳ
     private void btnShowSemesterDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowSemesterDialogActionPerformed
-
+        
         resetFormSemester();
         InputSemesterDialog.setLocationRelativeTo(null);
         btnAddSemester.setVisible(true);
@@ -829,30 +792,18 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         setSemesterModel(semester);
     }//GEN-LAST:event_semesterListMouseClicked
 
-    public boolean validateFormSchoolYear() {
-        if (txtSchoolYearID.getText().isEmpty() || txtSchoolYearName.getText().isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-
     // thêm năm học
     private void btnAddSchoolYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSchoolYearActionPerformed
-        if (validateFormSchoolYear()) {
-            SchoolYear schoolYear = getSchoolYearModel();
-            if (schoolYearBUS.addSchoolYear(schoolYear)) {
-                JOptionPane.showMessageDialog(this, "Thêm thành công");
-                LoadDataTableSchoolYear();
-                LoadComboboxSchoolYear();
-                resetFormSchoolYear();
-                InputSchoolYearDialog.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(this, "Thêm thất bại");
-            }
+        SchoolYear schoolYear = getSchoolYearModel();
+        if (schoolYearBUS.addSchoolYear(schoolYear)) {
+            JOptionPane.showMessageDialog(this, "Thêm thành công");
+            LoadDataTableSchoolYear();
+            LoadComboboxSchoolYear();
+            resetFormSchoolYear();
+            InputSchoolYearDialog.setVisible(false);
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin");
+            JOptionPane.showMessageDialog(this, "Thêm thất bại");
         }
-
     }//GEN-LAST:event_btnAddSchoolYearActionPerformed
 
     private void btnEscActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscActionPerformed
@@ -899,90 +850,6 @@ public class SchoolYearPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnEditSchoolYearActionPerformed
 
-    // Hàm mở file
-    public void openFile(String file) {
-        try {
-            File path = new File(file);
-            Desktop.getDesktop().open(path);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    // Xuất file excel danh sách năm học
-    private void btnExportExcelSchoolYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelSchoolYearActionPerformed
-        // TODO add your handling code here:
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Học Sinh");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < schoolYearList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(schoolYearList.getColumnName(i));
-                }
-                for (int i = 0; i < schoolYearList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < schoolYearList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (schoolYearList.getValueAt(i, j) != null) {
-                            cell.setCellValue(schoolYearList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportExcelSchoolYearActionPerformed
-
-    private void btnExportExcelSemesterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelSemesterActionPerformed
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Học Sinh");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < semesterList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(semesterList.getColumnName(i));
-                }
-                for (int i = 0; i < semesterList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < semesterList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (semesterList.getValueAt(i, j) != null) {
-                            cell.setCellValue(semesterList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportExcelSemesterActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog InputSchoolYearDialog;
@@ -995,8 +862,6 @@ public class SchoolYearPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnEditSemester;
     private javax.swing.JButton btnEsc;
     private javax.swing.JButton btnEsc1;
-    private javax.swing.JButton btnExportExcelSchoolYear;
-    private javax.swing.JButton btnExportExcelSemester;
     private javax.swing.JButton btnShowEditSchoolYearDialog;
     private javax.swing.JButton btnShowEditSemesterDialog;
     private javax.swing.JButton btnShowSchoolYearDialog;

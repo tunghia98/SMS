@@ -68,7 +68,7 @@ public class ClassDAO extends DatabaseConnection {
     public boolean editClass(Class class1) {
         Boolean result = false;
         open();
-        String sql = "UPDATE [Class] SET Class_Name = ?, Grade_ID = ?, Quantity = ?, SchoolYear_ID = ?, Teacher_ID = ?  WHERE Class_ID = ?";
+        String sql = "UPDATE Class SET Class_Name = ?, Grade_Name = ?, Quantity = ?, SchoolYear_ID = ?, Teacher_ID = ?  WHERE Class_ID = ?";
         try {
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, class1.getClassName());

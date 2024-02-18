@@ -25,8 +25,8 @@ public class MarkBUS {
         return markDAO.addMark(mark);
     }
 
-    public boolean editmark(Mark mark, String teacherID) {
-        return markDAO.editmark(mark, teacherID);
+    public boolean editmark(Mark mark) {
+        return markDAO.editmark(mark);
     }
 
     public Mark getmarkbystdandteacher(String studentID, String teacherID) {
@@ -39,16 +39,6 @@ public class MarkBUS {
             }
         }
         return null;
-    }
-    
-    public boolean checkDuplicate(String studentID) {
-
-        for (Mark mark : markDAO.getAllMark()) {
-            if (mark.getStudentID().equals(studentID)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public ArrayList<Mark> getmarkbystudentID(String studentID) {

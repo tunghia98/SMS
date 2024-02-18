@@ -11,20 +11,9 @@ import java.util.ArrayList;
 public class ClassBUS {
 
     private ClassDAO classDAO = new ClassDAO();
-    
 
     public ArrayList<Class> getAllClass() {
         return classDAO.getAllClass();
-    }
-
-    public ArrayList<Class> getAllCurrentClass(String teacherID) {
-        ArrayList<Class> classList = new ArrayList<Class>();
-        for (DTO.Class cl : classDAO.getAllClass()) {
-            if (cl.getTeacherID().equals(teacherID)) {
-                classList.add(cl);
-            }
-        }
-        return classList;
     }
 
     public boolean addClass(Class class1) {
@@ -77,8 +66,8 @@ public class ClassBUS {
     }
 
     public boolean updateQuantity(int count, String classID) {
-        return classDAO.updateQuantity(count, classID);
+        {
+            return classDAO.updateQuantity(count, classID);
+        }
     }
-    
- 
 }

@@ -1,6 +1,6 @@
 ﻿CREATE DATABASE StudentManagementSystem
 GO
-USE SMS_Java
+USE StudentManagementSystem
 GO
 /*============================================ NGƯỜI DÙNG VÀ VAI TRÒ NGƯỜI DÙNG ================================*/
 CREATE TABLE [Role] 
@@ -44,6 +44,7 @@ FOREIGN KEY (Function_ID) REFERENCES [Function](Function_ID)
 
 GO
 
+select * from [Role]
 
 CREATE TABLE [User]
 (
@@ -54,6 +55,9 @@ CREATE TABLE [User]
 )
 
 GO
+
+select * from [User]
+
 
 ALTER TABLE [User]
 ADD CONSTRAINT User_RoleID
@@ -128,6 +132,40 @@ CREATE TABLE [Subject]
 
 GO
 
+/*============================================= HỌC LỰC ========================================================*/
+CREATE TABLE AcademicLevel
+(
+    AcademicLevel_ID VARCHAR(50) PRIMARY KEY NOT NULL,
+    AcademicLevel_Name NVARCHAR(250) NOT NULL,
+    Minimum_Score FLOAT NOT NULL,
+    Maximum_Score FLOAT NOT NULL,
+    Unbounded_Score FLOAT NOT NULL
+
+)
+/*==============================================================================================================*/
+
+GO
+
+/*============================================= HẠNH KIỂM ========================================================*/
+CREATE TABLE Conduct
+(
+    Conduct_ID VARCHAR(50) PRIMARY KEY NOT NULL,
+    Conduct_Name NVARCHAR(250) NOT NULL
+)
+/*==============================================================================================================*/
+
+GO
+
+/*============================================ KẾT QUẢ CUỐI NĂM ================================================*/
+CREATE TABLE AcademicResult
+(
+    Result_ID VARCHAR(50) PRIMARY KEY NOT NULL,
+    Result_Name NVARCHAR(250) NOT NULL
+)
+/*==============================================================================================================*/
+
+GO
+
 /*============================================== GIÁO VIÊN =====================================================*/
 CREATE TABLE Teacher
 (
@@ -162,7 +200,7 @@ GO
 
 INSERT INTO Teacher (Teacher_ID, Teacher_Name, Date_Of_Birth, Gender, Phone, Email, [Address], [Status])
 VALUES 
-    ('T001', N'Admin', '2003-09-22', N'Nam', '1234567890', 'quyquach@gmail.com', N'Quận 5', 1)
+    ('T001', N'Quách Gia Quy', '2003-09-22', N'Nam', '1234567890', 'quyquach@gmail.com', N'Quận 5', 1)
 
 ALTER TABLE [User] 
 ADD CONSTRAINT User_TeacherID
@@ -267,6 +305,7 @@ GO
 /*================================================= ĐIỂM HỌC SINH - MÔN HỌC================================================*/
 CREATE TABLE Student_Mark_Subject
 (
+	Mark_ID VARCHAR(50) PRIMARY KEY NOT NULL,
 	Student_ID VARCHAR(50) NOT NULL,
 	Subject_ID VARCHAR(50) NOT NULL,
 	Semester_ID VARCHAR(50) NOT NULL,
@@ -276,8 +315,7 @@ CREATE TABLE Student_Mark_Subject
 	Mark_1_15M FLOAT,
 	Mark_2_1P FLOAT,
 	Mark_3_F FLOAT,
-	Mark_Avg FLOAT,
-	PRIMARY KEY(Student_ID, SchoolYear_ID, Subject_ID, Semester_ID),
+	Mark_Avg FLOAT
 )
 
 GO
@@ -307,18 +345,6 @@ FOREIGN KEY (SchoolYear_ID) REFERENCES SchoolYear(SchoolYear_ID)
 /*=========================================================================================================================*/
 
 
-CREATE TABLE Student_Mark_Final
-(
-	Student_ID VARCHAR(6) NOT NULL,
-	SchoolYear_ID VARCHAR(6) NOT NULL,
-	Dis_Result VARCHAR(6) NOT NULL,
-	Mark_1 FLOAT NOT NULL,
-	Mark_2 FLOAT NOT NULL,
-	Mark_Final FLOAT NOT NULL, 
-	PRIMARY KEY(Student_ID, SchoolYear_ID)
-)
-
-
 CREATE TABLE Discipline
 (
 	Dis_ID VARCHAR(50),
@@ -339,10 +365,6 @@ CREATE TABLE Discliprorole
 
 use master
 drop database StudentManagementSystem
-delete from [User]
-delete from Teacher
-delete from [Class]
-delete from Student
-delete from teachingAssignment
+
 select * from [user]
 */

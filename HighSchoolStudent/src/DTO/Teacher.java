@@ -18,14 +18,14 @@ public class Teacher {
     private String phone;
     private String email;
     private String address;
-    private int status;
+    private String status;
     private String image;
     private String subjectID;
 
     public Teacher() {
     }
 
-    public Teacher(String teacherID, String teacherName, String dateOfBirth, String gender, String phone, String email, String address, int status, String image, String subjectID) {
+    public Teacher(String teacherID, String teacherName, String dateOfBirth, String gender, String phone, String email, String address, String status, String image, String subjectID) {
         this.teacherID = teacherID;
         this.teacherName = teacherName;
         this.dateOfBirth = dateOfBirth;
@@ -38,6 +38,7 @@ public class Teacher {
         this.subjectID = subjectID;
     }
 
+    
     public String getTeacherID() {
         return teacherID;
     }
@@ -94,11 +95,11 @@ public class Teacher {
         this.address = address;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

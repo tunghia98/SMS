@@ -12,18 +12,9 @@ import DTO.Grade;
 import DTO.Class;
 import DTO.SchoolYear;
 import DTO.Teacher;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileOutputStream;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -45,8 +36,15 @@ public class ClassGradePanel extends javax.swing.JPanel {
         loadDataTableGrade();
         loadDataTableClass();
         loadcombobox();
+        loadcomboboxgrade();
     }
 
+    private void loadcomboboxgrade()  {
+        DefaultComboBoxModel gradeModel = new DefaultComboBoxModel();
+        for(Grade grade :gradeBUS.getAllGrades())
+            gradeModel.addElement(grade.getGradeName());
+        comboboxGrade.setModel(gradeModel);
+    }
     private void loadDataTableClass() {
         DefaultTableModel model = (DefaultTableModel) classList.getModel();
         model.setRowCount(0); // xóa table
@@ -59,6 +57,7 @@ public class ClassGradePanel extends javax.swing.JPanel {
             dataRow[4] = class1.getShoolyear();
             dataRow[5] = class1.getTeacherID();
             model.addRow(dataRow);
+            System.out.println(class1.toString());
         }
 
     }
@@ -145,6 +144,7 @@ public class ClassGradePanel extends javax.swing.JPanel {
         txtClassSchoolYear = new javax.swing.JTextField();
         txtClassQuantity = new javax.swing.JTextField();
         txtClassGrade = new javax.swing.JTextField();
+        comboboxGrade = new javax.swing.JComboBox<>();
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -153,7 +153,6 @@ public class ClassGradePanel extends javax.swing.JPanel {
         showClassDialog = new javax.swing.JButton();
         btnShowEditClassDialog = new javax.swing.JButton();
         btnDeleteClass = new javax.swing.JButton();
-        btnExportExcelClass = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         classList = new javax.swing.JTable();
@@ -173,7 +172,6 @@ public class ClassGradePanel extends javax.swing.JPanel {
         showGradeDialog = new javax.swing.JButton();
         showEditGradeDialog = new javax.swing.JButton();
         deleteGrade = new javax.swing.JButton();
-        btnExportExcelGrade = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         gradeList = new javax.swing.JTable();
@@ -282,6 +280,7 @@ public class ClassGradePanel extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Mã Lớp");
 
+        txtClassID.setEditable(false);
         txtClassID.setFont(new java.awt.Font("Segoe UI Variable", 0, 12)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Variable", 0, 12)); // NOI18N
@@ -349,6 +348,8 @@ public class ClassGradePanel extends javax.swing.JPanel {
 
         txtClassGrade.setFont(new java.awt.Font("Segoe UI Variable", 0, 12)); // NOI18N
 
+        comboboxGrade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
@@ -369,10 +370,14 @@ public class ClassGradePanel extends javax.swing.JPanel {
                             .addComponent(jLabel7)
                             .addComponent(jLabel6)
                             .addComponent(txtClassSchoolYear, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtClassQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtClassGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(comboboxGrade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtClassQuantity, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtClassGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -388,7 +393,9 @@ public class ClassGradePanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtClassGrade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtClassGrade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboboxGrade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -450,14 +457,6 @@ public class ClassGradePanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportExcelClass.setFont(new java.awt.Font("Segoe UI Variable", 0, 12)); // NOI18N
-        btnExportExcelClass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportExcelClass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportExcelClassActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -469,19 +468,15 @@ public class ClassGradePanel extends javax.swing.JPanel {
                 .addComponent(btnShowEditClassDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnDeleteClass, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportExcelClass, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnShowEditClassDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(showClassDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(btnDeleteClass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnExportExcelClass, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnShowEditClassDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(showClassDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnDeleteClass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -519,7 +514,7 @@ public class ClassGradePanel extends javax.swing.JPanel {
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -656,11 +651,12 @@ public class ClassGradePanel extends javax.swing.JPanel {
             .addGroup(classPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(classPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(classPanelLayout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(classPanelLayout.createSequentialGroup()
-                        .addGroup(classPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -670,7 +666,7 @@ public class ClassGradePanel extends javax.swing.JPanel {
             .addGroup(classPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(classPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -707,14 +703,6 @@ public class ClassGradePanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportExcelGrade.setFont(new java.awt.Font("Segoe UI Variable", 0, 12)); // NOI18N
-        btnExportExcelGrade.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportExcelGrade.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportExcelGradeActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -726,8 +714,6 @@ public class ClassGradePanel extends javax.swing.JPanel {
                 .addComponent(showEditGradeDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(deleteGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportExcelGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -736,9 +722,8 @@ public class ClassGradePanel extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(deleteGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(showEditGradeDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(showGradeDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExportExcelGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(9, Short.MAX_VALUE))
+                    .addComponent(showGradeDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Danh sách khối lớp"));
@@ -775,7 +760,7 @@ public class ClassGradePanel extends javax.swing.JPanel {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -786,10 +771,10 @@ public class ClassGradePanel extends javax.swing.JPanel {
             .addGroup(gradePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(gradePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(gradePanelLayout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         gradePanelLayout.setVerticalGroup(
@@ -798,7 +783,7 @@ public class ClassGradePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -839,10 +824,6 @@ public class ClassGradePanel extends javax.swing.JPanel {
         class1.setClassID(txtClassID.getText());
         class1.setClassName(txtClassName.getText());
         class1.setGradeID(txtClassGrade.getText());
-        if(Integer.valueOf(txtClassQuantity.getText())>40){
-            txtClassQuantity.setText("40");
-        }
-        else
         class1.setQuantity(Integer.parseInt(txtClassQuantity.getText()));
         class1.setShoolyear(txtClassSchoolYear.getText());
         class1.setTeacherID(txtClassTeacher.getText());
@@ -862,6 +843,7 @@ public class ClassGradePanel extends javax.swing.JPanel {
     private void btnAddClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddClassActionPerformed
         if (validateFormClass()) {
             Class class1 = getModelClass();
+            class1.setClassID(class1.getClassName()+class1.getShoolyear());
             if (classBUS.addClass(class1)) {
                 JOptionPane.showMessageDialog(this, "Thêm lớp thành công");
                 loadDataTableClass();
@@ -1105,27 +1087,23 @@ public class ClassGradePanel extends javax.swing.JPanel {
     private void SchoolYearBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SchoolYearBoxActionPerformed
 // TODO add your handling code here:
         factor[0] = SchoolYearBox.getSelectedItem().toString();
-        if (factor[0] == "") {
-            loadDataTableClass();
+        if (RGrade10Btn.isSelected()) {
+            factor[1] = "KHOI10";
+        } else if (RGrade11Btn.isSelected()) {
+            factor[1] = "KHOI11";
+        } else if (RGrade12Btn.isSelected()) {
+            factor[1] = "KHOI12";
         } else {
-            if (RGrade10Btn.isSelected()) {
-                factor[1] = "KHOI10";
-            } else if (RGrade11Btn.isSelected()) {
-                factor[1] = "KHOI11";
-            } else if (RGrade12Btn.isSelected()) {
-                factor[1] = "KHOI12";
-            } else {
-                factor[1] = " ";
-            }
-            factor[2] = orderByBox.getSelectedItem().toString();
-            if (RiseBtn.isSelected()) {
-                factor[3] = "Rise";
-            } else {
-                factor[3] = "Low";
-            }
-            SchoolYearBox.setSelectedItem(ABORT);
-            loadDataClassFactor(factor);
+            factor[1] = " ";
         }
+        factor[2] = orderByBox.getSelectedItem().toString();
+        if (RiseBtn.isSelected()) {
+            factor[3] = "Rise";
+        } else {
+            factor[3] = "Low";
+        }
+        SchoolYearBox.setSelectedItem(ABORT);
+        loadDataClassFactor(factor);
 
 
     }//GEN-LAST:event_SchoolYearBoxActionPerformed
@@ -1188,87 +1166,6 @@ public class ClassGradePanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_RGrade12BtnActionPerformed
 
-    private void btnExportExcelClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelClassActionPerformed
-// TODO add your handling code here:
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Tổng kết điểm kỳ học");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < classList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(classList.getColumnName(i));
-                }
-                for (int i = 0; i < classList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < classList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (classList.getValueAt(i, j) != null) {
-                            cell.setCellValue(classList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportExcelClassActionPerformed
-
-    private void btnExportExcelGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelGradeActionPerformed
-        // TODO add your handling code here:
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Tổng kết điểm kỳ học");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < gradeList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(gradeList.getColumnName(i));
-                }
-                for (int i = 0; i < gradeList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < gradeList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (gradeList.getValueAt(i, j) != null) {
-                            cell.setCellValue(gradeList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportExcelGradeActionPerformed
-    public void openFile(String file) {
-        try {
-            File path = new File(file);
-            Desktop.getDesktop().open(path);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton LowBtn;
@@ -1284,14 +1181,13 @@ public class ClassGradePanel extends javax.swing.JPanel {
     private javax.swing.JButton btnEditGrade;
     private javax.swing.JButton btnEsc;
     private javax.swing.JButton btnEsc1;
-    private javax.swing.JButton btnExportExcelClass;
-    private javax.swing.JButton btnExportExcelGrade;
     private javax.swing.JButton btnShowEditClassDialog;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JDialog classDialog;
     private javax.swing.JTable classList;
     private javax.swing.JPanel classPanel;
+    private javax.swing.JComboBox<String> comboboxGrade;
     private javax.swing.JButton deleteGrade;
     private javax.swing.JDialog gradeDialog;
     private javax.swing.JTable gradeList;

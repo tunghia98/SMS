@@ -21,31 +21,18 @@ import BUS.DisciplineBUS;
 import DTO.Mark;
 import BUS.MarkBUS;
 import DAO.TeachingAssignmentDAO;
-import java.awt.Desktop;
 import java.awt.Image;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -62,8 +49,7 @@ public class StudentResultPanel extends javax.swing.JPanel {
     TeachingAssignmentBUS teachBUS = new TeachingAssignmentBUS();
     MarkBUS markBUS = new MarkBUS();
     String uID;
-    float result = 0;
-
+    float result =0;
     public StudentResultPanel() {
         initComponents();
     }
@@ -71,63 +57,48 @@ public class StudentResultPanel extends javax.swing.JPanel {
     public StudentResultPanel(String userID) {
         initComponents();
         uID = userID;
+        loadDataStudentTable(uID);
         loadDataStudentDisTable(uID);
         loadDataresultTable();
-        LoadComboboxClass(uID);
-        String classID = comboboxClass.getSelectedItem().toString();
-        loadDataStudentTable(uID, classID);
     }
 
-    public void LoadComboboxClass(String uID) {
-        DefaultComboBoxModel currentClassModel = new DefaultComboBoxModel();
-        for (TeachingAssignment currentClass : teachBUS.getTeachingAssignmentByTeacherID(uID)) {
-            currentClassModel.addElement(currentClass.getClassID());
-        }
-        comboboxClass.setModel(currentClassModel);
-    }
-
-    public void loadDataStudentTable(String uID, String classID) {
+    public void loadDataStudentTable(String uID) {
         DefaultTableModel model = (DefaultTableModel) studentList.getModel();
         model.setRowCount(0); // xóa table 
-        for (Student student : studentBUS.getStudentByClass(classID)) {
-            Object dataRow[] = new Object[8];
-            dataRow[0] = student.getStudentID();
-            dataRow[1] = student.getStudentName();
-            Mark mark = markBUS.getmarkbystdandteacher(student.getStudentID(), uID);
-            if (mark == null) {
+        DefaultComboBoxModel comboCurrentClass = new DefaultComboBoxModel();
+        for (TeachingAssignment teach : teachBUS.getTeachingAssignmentByTeacherID(uID)) {
+            for (Student student : studentBUS.getStudentByClass(teach.getClassID())) {
+                Object dataRow[] = new Object[8];
+                dataRow[0] = student.getStudentID();
+                dataRow[1] = student.getStudentName();
 
-                dataRow[2] = "";
-                dataRow[3] = "";
-                dataRow[4] = "";
-                dataRow[5] = "";
-                dataRow[6] = "";
-                dataRow[7] = "";
-            } else {
+                Mark mark = markBUS.getmarkbystdandteacher(student.getStudentID(), uID);
+                if (mark == null) {
 
-                dataRow[2] = mark.getMark_1();
-                dataRow[3] = mark.getMark_2();
-                dataRow[4] = mark.getMark_15();
-                dataRow[5] = mark.getMark_45();
-                dataRow[6] = mark.getMark_end();
-                dataRow[7] = mark.getMark_avg();
+                    dataRow[2] = "";
+                    dataRow[3] = "";
+                    dataRow[4] = "";
+                    dataRow[5] = "";
+                    dataRow[6] = "";
+                    dataRow[7] = "";
+                } else {
+
+                    dataRow[2] = mark.getMark_1();
+                    dataRow[3] = mark.getMark_2();
+                    dataRow[4] = mark.getMark_15();
+                    dataRow[5] = mark.getMark_45();
+                    dataRow[6] = mark.getMark_end();
+                    dataRow[7] = mark.getMark_avg();
+                }
+                model.addRow(dataRow);
             }
-            model.addRow(dataRow);
         }
-
     }
 
     public void loadDataStudentDisTable(String userID) {
-        DTO.Class class1 = new Class();
-        try {
-            class1 = classBUS.getClassByTeacherID(userID);
-        } catch (Exception e) {
-            System.out.println("Error: " + e.toString());
-        }
-        if(class1 == null) {
-            return;
-        }
         DefaultTableModel model = (DefaultTableModel) studentdisList.getModel();
         model.setRowCount(0); // xóa table 
+        Class class1 = classBUS.getClassByTeacherID(userID);
         for (Student student : studentBUS.getStudentByClass(class1.getClassID())) {
             Object dataRow[] = new Object[4];
             dataRow[0] = student.getStudentID();
@@ -170,58 +141,67 @@ public class StudentResultPanel extends javax.swing.JPanel {
                 dataRow[15] = "";
 
             } else {
-                result = 0;
-                int cout = 0;
-                for (Mark mark : markList) {
+                result=0;
+                int cout=0;
+                for(Mark mark:markList)
+                {
                     Teacher teacher = teacherBUS.getTeacherByID(mark.getTeacherId());
                     Subject sj = sjBUS.getSubjectByID(teacher.getSubjectID());
-                    if (sj.getSubjectName().equals("Toán")) {
-                        dataRow[4] = mark.getMark_avg();
-                        result += mark.getMark_avg() * 2;
-                        cout += 2;
+                    if(sj.getSubjectName().equals("Toán"))
+                    {
+                        dataRow[4]=mark.getMark_avg();
+                        result+=mark.getMark_avg()*2;
+                        cout+=2;
                     }
-                    if (sj.getSubjectName().equals("Văn")) {
-                        dataRow[5] = mark.getMark_avg();
-                        result += mark.getMark_avg() * 2;
-                        cout += 2;
+                    if(sj.getSubjectName().equals("Văn"))
+                    {
+                        dataRow[5]=mark.getMark_avg();
+                        result+=mark.getMark_avg()*2;
+                        cout+=2;
                     }
-                    if (sj.getSubjectName().equals("Anh")) {
-                        dataRow[6] = mark.getMark_avg();
-                        result += mark.getMark_avg() * 2;
-                        cout += 2;
+                    if(sj.getSubjectName().equals("Anh"))
+                    {
+                        dataRow[6]=mark.getMark_avg();
+                        result+=mark.getMark_avg()*2;
+                        cout+=2;
                     }
-                    if (sj.getSubjectName().equals("Vật Lý")) {
-                        dataRow[7] = mark.getMark_avg();
-                        result += mark.getMark_avg();
+                    if(sj.getSubjectName().equals("Vật Lý"))
+                    {
+                        dataRow[7]=mark.getMark_avg();
+                        result+=mark.getMark_avg();
                         cout++;
                     }
-                    if (sj.getSubjectName().equals("Hóa Học")) {
-                        dataRow[8] = mark.getMark_avg();
-                        result += mark.getMark_avg();
+                    if(sj.getSubjectName().equals("Hóa Học"))
+                    {
+                        dataRow[8]=mark.getMark_avg();
+                        result+=mark.getMark_avg();
                         cout++;
                     }
-                    if (sj.getSubjectName().equals("Sinh Học")) {
-                        dataRow[9] = mark.getMark_avg();
-                        result += mark.getMark_avg();
+                    if(sj.getSubjectName().equals("Sinh Học"))
+                    {
+                        dataRow[9]=mark.getMark_avg();
+                        result+=mark.getMark_avg();
                         cout++;
                     }
-                    if (sj.getSubjectName().equals("Lịch Sử")) {
-                        dataRow[10] = mark.getMark_avg();
-                        result += mark.getMark_avg();
+                    if(sj.getSubjectName().equals("Lịch Sử"))                    {
+                        dataRow[10]=mark.getMark_avg();
+                        result+=mark.getMark_avg();
                         cout++;
                     }
-                    if (sj.getSubjectName().equals("Địa Lý")) {
-                        dataRow[11] = mark.getMark_avg();
-                        result += mark.getMark_avg();
+                    if(sj.getSubjectName().equals("Địa Lý"))
+                    {
+                        dataRow[11]=mark.getMark_avg();
+                        result+=mark.getMark_avg();
                         cout++;
                     }
-                    if (sj.getSubjectName().equals("Giáo Dục Công Dân")) {
-                        dataRow[12] = mark.getMark_avg();
-                        result += mark.getMark_avg();
+                    if(sj.getSubjectName().equals("Giáo Dục Công Dân"))
+                    {
+                        dataRow[12]=mark.getMark_avg();
+                        result+=mark.getMark_avg();
                         cout++;
                     }
                 }
-                dataRow[13] = result / cout;
+                dataRow[13]=result/cout; 
             }
             StudentDis studentdis = studentdisBUS.getStudentDisByID(student.getStudentID());
             if (studentdis == null) {
@@ -230,15 +210,14 @@ public class StudentResultPanel extends javax.swing.JPanel {
             } else {
                 dataRow[14] = studentdis.getResult();
             }
-            if (dataRow[13] != "" && dataRow[14] != "") {
-                dataRow[15] = Xeploai(result, studentdis.getScore());
-            }
+            if(dataRow[13]!=""&&dataRow[14]!="")
+                dataRow[15]=Xeploai(result,studentdis.getScore());
             model.addRow(dataRow);
         }
     }
-
-    public String Xeploai(float result, float score) {
-        if (result >= 9 && score >= 90) {
+    public String Xeploai(float result,float score)
+    {
+         if (result >= 9 && score >= 90) {
             return "Xuất sắc";
         } else if (result >= 8 && score >= 80) {
             return "Giỏi";
@@ -250,7 +229,6 @@ public class StudentResultPanel extends javax.swing.JPanel {
             return "Yếu";
         }
     }
-
     public StudentDis getStudentDisModel(float Score, String result) {
         StudentDis studentdis = new StudentDis();
         studentdis.setStudentID(txtStudentDisID.getText());
@@ -519,10 +497,9 @@ public class StudentResultPanel extends javax.swing.JPanel {
         studentList = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         btnShowEditDialog = new javax.swing.JButton();
-        btnExportExcel = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        comboboxClass = new javax.swing.JComboBox<>();
+        cboxStudent = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         studentPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -530,16 +507,24 @@ public class StudentResultPanel extends javax.swing.JPanel {
         studentdisList = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         btnShowEditDisDialog = new javax.swing.JButton();
-        btnExportExcelDis = new javax.swing.JButton();
-        jPanel10 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        cboxStudent1 = new javax.swing.JComboBox<>();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        jComboBox4 = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        jComboBox5 = new javax.swing.JComboBox<>();
+        jLabel16 = new javax.swing.JLabel();
+        jComboBox6 = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
         studentPanel2 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         resultList = new javax.swing.JTable();
         jPanel8 = new javax.swing.JPanel();
-        btnExportExcelResult = new javax.swing.JButton();
+        btnShowEditDisDialog1 = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
 
         StudentDisDialog.setMinimumSize(new java.awt.Dimension(556, 561));
         StudentDisDialog.setModal(true);
@@ -2444,8 +2429,7 @@ public class StudentResultPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1016, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane3))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2457,18 +2441,10 @@ public class StudentResultPanel extends javax.swing.JPanel {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Thao tác"));
 
         btnShowEditDialog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Edit.png"))); // NOI18N
-        btnShowEditDialog.setPreferredSize(new java.awt.Dimension(60, 60));
+        btnShowEditDialog.setPreferredSize(new java.awt.Dimension(70, 40));
         btnShowEditDialog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnShowEditDialogActionPerformed(evt);
-            }
-        });
-
-        btnExportExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportExcel.setPreferredSize(new java.awt.Dimension(60, 60));
-        btnExportExcel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportExcelActionPerformed(evt);
             }
         });
 
@@ -2477,18 +2453,14 @@ public class StudentResultPanel extends javax.swing.JPanel {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(84, 84, 84)
                 .addComponent(btnShowEditDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnShowEditDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExportExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnShowEditDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -2497,11 +2469,6 @@ public class StudentResultPanel extends javax.swing.JPanel {
         jLabel3.setText("Lớp");
 
         jButton1.setText("Tìm");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -2509,20 +2476,24 @@ public class StudentResultPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(comboboxClass, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(cboxStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 374, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(178, 178, 178))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(comboboxClass, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboxStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -2537,8 +2508,8 @@ public class StudentResultPanel extends javax.swing.JPanel {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(studentPanelLayout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         studentPanelLayout.setVerticalGroup(
@@ -2549,7 +2520,8 @@ public class StudentResultPanel extends javax.swing.JPanel {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         studentTabbedPane.addTab("Điểm", studentPanel);
@@ -2580,16 +2552,13 @@ public class StudentResultPanel extends javax.swing.JPanel {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1016, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane2)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 14, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Thao tác"));
@@ -2602,14 +2571,6 @@ public class StudentResultPanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportExcelDis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportExcelDis.setPreferredSize(new java.awt.Dimension(60, 60));
-        btnExportExcelDis.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportExcelDisActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -2617,41 +2578,76 @@ public class StudentResultPanel extends javax.swing.JPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnShowEditDisDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportExcelDis, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnShowEditDisDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExportExcelDis, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnShowEditDisDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("Tìm kiếm"));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Tìm kiếm"));
 
-        jLabel4.setText("Lớp");
+        jLabel13.setText("Họ tên");
 
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
+        jLabel14.setText("Giới tính");
+
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nam", "Nữ" }));
+
+        jLabel15.setText("Lớp");
+
+        jLabel16.setText("Khối");
+
+        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khối 10", "Khối 11", "Khối 12" }));
+
+        jButton2.setText("Tìm");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jLabel4)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(cboxStudent1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addGap(135, 135, 135)
+                        .addComponent(jLabel15)
+                        .addGap(130, 130, 130)
+                        .addComponent(jLabel16))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)
+                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)))
+                .addContainerGap())
         );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(cboxStudent1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel14)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2665,8 +2661,8 @@ public class StudentResultPanel extends javax.swing.JPanel {
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(studentPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         studentPanel1Layout.setVerticalGroup(
@@ -2675,9 +2671,9 @@ public class StudentResultPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(studentPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2704,25 +2700,22 @@ public class StudentResultPanel extends javax.swing.JPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1016, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 14, Short.MAX_VALUE))
         );
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Thao tác"));
 
-        btnExportExcelResult.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportExcelResult.setPreferredSize(new java.awt.Dimension(70, 40));
-        btnExportExcelResult.addActionListener(new java.awt.event.ActionListener() {
+        btnShowEditDisDialog1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Edit.png"))); // NOI18N
+        btnShowEditDisDialog1.setPreferredSize(new java.awt.Dimension(70, 40));
+        btnShowEditDisDialog1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportExcelResultActionPerformed(evt);
+                btnShowEditDisDialog1ActionPerformed(evt);
             }
         });
 
@@ -2732,14 +2725,33 @@ public class StudentResultPanel extends javax.swing.JPanel {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnExportExcelResult, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnShowEditDisDialog1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(btnExportExcelResult, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnShowEditDisDialog1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+        );
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Tìm kiếm"));
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel20)
+                .addGap(78, 78, 78))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel20)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout studentPanel2Layout = new javax.swing.GroupLayout(studentPanel2);
@@ -2752,14 +2764,17 @@ public class StudentResultPanel extends javax.swing.JPanel {
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(studentPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         studentPanel2Layout.setVerticalGroup(
             studentPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(studentPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(studentPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -2775,7 +2790,10 @@ public class StudentResultPanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(studentTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(studentTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 606, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -3461,15 +3479,14 @@ public class StudentResultPanel extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
             }
         } else {
-            if (markBUS.editmark(mark, uID)) {
+            if (markBUS.editmark(mark)) {
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công");
             } else {
                 System.out.println("ở đây");
                 JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
             }
         }
-        String classID = comboboxClass.getSelectedItem().toString();
-        loadDataStudentTable(uID, classID);
+        loadDataStudentTable(uID);
         StudentDisDialog.setVisible(false);
     }//GEN-LAST:event_btnAddMarkActionPerformed
 
@@ -3485,133 +3502,9 @@ public class StudentResultPanel extends javax.swing.JPanel {
         txtStudentDisName.setText(student.getStudentName());
     }//GEN-LAST:event_studentdisListMouseClicked
 
-    private void btnExportExcelResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelResultActionPerformed
+    private void btnShowEditDisDialog1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowEditDisDialog1ActionPerformed
         // TODO add your handling code here:
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Tổng kết điểm kỳ học");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < resultList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(resultList.getColumnName(i));
-                }
-                for (int i = 0; i < resultList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < resultList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (resultList.getValueAt(i, j) != null) {
-                            cell.setCellValue(resultList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-
-    }//GEN-LAST:event_btnExportExcelResultActionPerformed
-
-    private void btnExportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelActionPerformed
-        // TODO add your handling code here:
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Học Sinh");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < studentList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(studentList.getColumnName(i));
-                }
-                for (int i = 0; i < studentList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < studentList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (studentList.getValueAt(i, j) != null) {
-                            cell.setCellValue(studentList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-
-    }//GEN-LAST:event_btnExportExcelActionPerformed
-    public void openFile(String file) {
-        try {
-            File path = new File(file);
-            Desktop.getDesktop().open(path);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-
-    private void btnExportExcelDisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelDisActionPerformed
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Học Sinh");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < studentdisList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(studentdisList.getColumnName(i));
-                }
-                for (int i = 0; i < studentdisList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < studentdisList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (studentdisList.getValueAt(i, j) != null) {
-                            cell.setCellValue(studentdisList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportExcelDisActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        String classID = comboboxClass.getSelectedItem().toString();
-        loadDataStudentTable(uID, classID);
-
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnShowEditDisDialog1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -3623,11 +3516,9 @@ public class StudentResultPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnAddStudentDis;
     private javax.swing.JButton btnEsc1;
     private javax.swing.JButton btnEsc2;
-    private javax.swing.JButton btnExportExcel;
-    private javax.swing.JButton btnExportExcelDis;
-    private javax.swing.JButton btnExportExcelResult;
     private javax.swing.JButton btnShowEditDialog;
     private javax.swing.JButton btnShowEditDisDialog;
+    private javax.swing.JButton btnShowEditDisDialog1;
     private javax.swing.JCheckBox cbox;
     private javax.swing.JCheckBox cbox1;
     private javax.swing.JCheckBox cbox10;
@@ -3665,10 +3556,18 @@ public class StudentResultPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox cbox7;
     private javax.swing.JCheckBox cbox8;
     private javax.swing.JCheckBox cbox9;
-    private javax.swing.JComboBox<String> cboxStudent1;
-    private javax.swing.JComboBox<String> comboboxClass;
+    private javax.swing.JComboBox<String> cboxStudent;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBox4;
+    private javax.swing.JComboBox<String> jComboBox5;
+    private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
@@ -3678,24 +3577,25 @@ public class StudentResultPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTable resultList;
     private javax.swing.JPanel studentFormPanel1;
     private javax.swing.JTable studentList;

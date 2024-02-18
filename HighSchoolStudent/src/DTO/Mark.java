@@ -107,11 +107,4 @@ public class Mark {
     public void setMark_avg(Float Mark_avg) {
         this.Mark_avg = Mark_avg;
     }
-
-    @Override
-    public String toString() {
-        return "Mark{" + "studentID=" + studentID + ", studentName=" + studentName + ", TeacherId=" + TeacherId + ", Mark_1=" + Mark_1 + ", Mark_2=" + Mark_2 + ", Mark_15=" + Mark_15 + ", Mark_45=" + Mark_45 + ", Mark_end=" + Mark_end + ", Mark_avg=" + Mark_avg + '}';
-    }
-    
 }
-

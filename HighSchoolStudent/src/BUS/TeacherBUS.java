@@ -23,15 +23,6 @@ public class TeacherBUS {
     public boolean addTeacher(Teacher teacher) {
         return teacherDAO.addTeacher(teacher);
     }
-    
-    public boolean addTeacherWithoutImage(Teacher teacher) {
-        for(Teacher tc : teacherDAO.getAllTeachers()) {
-            if(tc.getTeacherID().equals(teacher.getTeacherID())) {
-                return false;
-            }
-        }
-        return teacherDAO.addTeacherWithoutImage(teacher);
-    }
     public ArrayList<String> getAllTeacherName() {
         ArrayList<String> teacherNameList = new ArrayList<String>();
         for(Teacher teacher : teacherDAO.getAllTeachers()) {

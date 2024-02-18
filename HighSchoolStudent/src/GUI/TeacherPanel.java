@@ -14,11 +14,8 @@ import DTO.Student;
 import DTO.Subject;
 import DTO.Teacher;
 import DTO.TeachingAssignment;
-import java.awt.Desktop;
 import java.awt.Image;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,14 +26,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -64,24 +54,22 @@ public class TeacherPanel extends javax.swing.JPanel {
         loadDataTableAssignment();
     }
 
-    // load danh sách giảng viên lên bảng
     public void loadDataTableTeacher() {
+
         DefaultTableModel model = (DefaultTableModel) teacherList.getModel();
         model.setRowCount(0); // xóa table 
         for (Teacher teacher : teacherBUS.getAllTeachers()) {
-            if (teacher.getStatus() == 1) {
-                Object dataRow[] = new Object[9];
-                dataRow[0] = teacher.getTeacherID();
-                dataRow[1] = teacher.getTeacherName();
-                dataRow[2] = teacher.getDateOfBirth();
-                dataRow[3] = teacher.getGender();
-                dataRow[4] = teacher.getPhone();
-                dataRow[5] = teacher.getEmail();
-                dataRow[6] = teacher.getAddress();
-                dataRow[7] = teacher.getStatus();
-                dataRow[8] = (subjectBUS.getSubjectByID(teacher.getSubjectID())).getSubjectName();
-                model.addRow(dataRow);
-            }
+            Object dataRow[] = new Object[9];
+            dataRow[0] = teacher.getTeacherID();
+            dataRow[1] = teacher.getTeacherName();
+            dataRow[2] = teacher.getDateOfBirth();
+            dataRow[3] = teacher.getGender();
+            dataRow[4] = teacher.getPhone();
+            dataRow[5] = teacher.getEmail();
+            dataRow[6] = teacher.getAddress();
+            dataRow[7] = teacher.getStatus();
+            dataRow[8] = (subjectBUS.getSubjectByID(teacher.getSubjectID())).getSubjectName();
+            model.addRow(dataRow);
             System.out.println(teacher.toString());
         }
 
@@ -99,9 +87,9 @@ public class TeacherPanel extends javax.swing.JPanel {
                 DTO.Class classAssign = classBUS.getClassByID(teachingAssignment.getClassID());
                 dataRow[2] = classAssign.getClassName();
                 SchoolYear schoolYear = schoolYearBUS.getSchoolYearByID(classAssign.getShoolyear());
-                dataRow[4] = schoolYear.getSchoolYearName();
+                dataRow[3] = schoolYear.getSchoolYearName();
                 Subject subject = subjectBUS.getSubjectByID(teacher.getSubjectID());
-                dataRow[3] = subject.getSubjectName();
+                dataRow[4] = subject.getSubjectName();
                 model.addRow(dataRow);
 
                 System.out.println(teachingAssignment.toString());
@@ -127,7 +115,6 @@ public class TeacherPanel extends javax.swing.JPanel {
         comboboxTeacher.setModel(comboTeacher);
     }
 
-    // Load danh sách tên các môn học cho combobox
     public void loadComboSubject() {
         DefaultComboBoxModel comboSubject = new DefaultComboBoxModel();
         for (Subject subject : subjectBUS.getAllSubjects()) {
@@ -200,7 +187,6 @@ public class TeacherPanel extends javax.swing.JPanel {
         btnShowTeacherDialog = new javax.swing.JButton();
         btnShowEditTeacherDialog = new javax.swing.JButton();
         btnDeleteTeacher = new javax.swing.JButton();
-        btnExportExcelTeacher = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         teacherList = new javax.swing.JTable();
@@ -209,22 +195,21 @@ public class TeacherPanel extends javax.swing.JPanel {
         showAssignmentDialog = new javax.swing.JButton();
         showEditAssignmentDialog = new javax.swing.JButton();
         deleteAssignement = new javax.swing.JButton();
-        btnExportExcelTeacher1 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         teachingAssignmentList = new javax.swing.JTable();
 
-        TeacherDialog.setMinimumSize(new java.awt.Dimension(483, 455));
+        TeacherDialog.setMinimumSize(new java.awt.Dimension(462, 455));
         TeacherDialog.setModal(true);
         TeacherDialog.setUndecorated(true);
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Thông tin giáo viên"));
 
-        jLabel1.setText("Mã giáo viên");
+        jLabel1.setText("ID");
 
-        jLabel2.setText("Họ Tên");
+        jLabel2.setText("Tên");
 
-        jLabel3.setText("Ngày Sinh");
+        jLabel3.setText("Ngày sinh");
 
         jLabel4.setText("Giới tính");
 
@@ -294,6 +279,10 @@ public class TeacherPanel extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -310,11 +299,7 @@ public class TeacherPanel extends javax.swing.JPanel {
                                 .addComponent(rdFemale))
                             .addComponent(csBirthDate, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                             .addComponent(subjectCombobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(37, 37, 37))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGap(37, 37, 37)))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -324,7 +309,7 @@ public class TeacherPanel extends javax.swing.JPanel {
                     .addComponent(jLabel5)
                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbImage, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,8 +366,8 @@ public class TeacherPanel extends javax.swing.JPanel {
             TeacherDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TeacherDialogLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         TeacherDialogLayout.setVerticalGroup(
             TeacherDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -535,13 +520,6 @@ public class TeacherPanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportExcelTeacher.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportExcelTeacher.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportExcelTeacherActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -553,8 +531,6 @@ public class TeacherPanel extends javax.swing.JPanel {
                 .addComponent(btnShowEditTeacherDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnDeleteTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportExcelTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -563,9 +539,8 @@ public class TeacherPanel extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnShowTeacherDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnShowEditTeacherDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDeleteTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExportExcelTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDeleteTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Danh sách giáo viên"));
@@ -578,7 +553,7 @@ public class TeacherPanel extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã Giáo Viên", "Họ Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Email", "Địa Chỉ", "Trạng Thái", "Môn học"
+                "ID", "Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Email", "Địa Chỉ", "Trạng Thái", "Môn học"
             }
         ));
         teacherList.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -599,8 +574,9 @@ public class TeacherPanel extends javax.swing.JPanel {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -643,18 +619,6 @@ public class TeacherPanel extends javax.swing.JPanel {
         showEditAssignmentDialog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Edit.png"))); // NOI18N
 
         deleteAssignement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Remove.png"))); // NOI18N
-        deleteAssignement.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteAssignementActionPerformed(evt);
-            }
-        });
-
-        btnExportExcelTeacher1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportExcelTeacher1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportExcelTeacher1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -667,8 +631,6 @@ public class TeacherPanel extends javax.swing.JPanel {
                 .addComponent(showEditAssignmentDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(deleteAssignement, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportExcelTeacher1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -677,9 +639,8 @@ public class TeacherPanel extends javax.swing.JPanel {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(deleteAssignement, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(showEditAssignmentDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(showAssignmentDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExportExcelTeacher1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(showAssignmentDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Danh sách giảng dạy"));
@@ -709,7 +670,7 @@ public class TeacherPanel extends javax.swing.JPanel {
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -720,10 +681,10 @@ public class TeacherPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -760,15 +721,6 @@ public class TeacherPanel extends javax.swing.JPanel {
         }
         return true;
     }
-
-//    public boolean checkTeacherFormInput() {
-//        boolean result = false;
-//        if(validateTeacherForm()) {
-//            if(txtTeacherID.getText().startsWith("GV")) {
-//                result = true;
-//            }
-//        }
-//    }
     private void btnAddTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTeacherActionPerformed
         if (validateTeacherForm()) {
             Teacher teacher = getTeacherModel();
@@ -803,7 +755,6 @@ public class TeacherPanel extends javax.swing.JPanel {
         TeacherDialog.setVisible(false);
     }//GEN-LAST:event_btnEscActionPerformed
 
-    // hàm làm mới form giáo viên
     public void resetTeacherForm() {
         txtTeacherID.setText("");
         txtTeacherName.setText("");
@@ -814,18 +765,11 @@ public class TeacherPanel extends javax.swing.JPanel {
         lbImage.setText("Chọn Ảnh");
     }
 
-    // Lấy dữ liệu trên form giáo viên trả về 1 đối tượng giáo viên
     public Teacher getTeacherModel() {
         Teacher teacher = new Teacher();
-
-        if (txtTeacherID.getText().startsWith("GV")) {
-            teacher.setTeacherID(txtTeacherID.getText());
-        } else {
-            JOptionPane.showMessageDialog(this, "Mã giáo viên phải bắt đầu bằng GV - VD : GV00x");
-        }
-
-        teacher.setEmail(txtEmail.getText());
+        teacher.setTeacherID(txtTeacherID.getText());
         teacher.setTeacherName(txtTeacherName.getText());
+        teacher.setEmail(txtEmail.getText());
         teacher.setPhone(txtPhone.getText());
         teacher.setAddress(txtAddress.getText());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -841,12 +785,10 @@ public class TeacherPanel extends javax.swing.JPanel {
         } else {
             teacher.setImage(strImage);
         }
-        String subjectID = subjectBUS.getSubjectByName(subjectCombobox.getSelectedItem().toString()).getSubjectID();
-        teacher.setSubjectID(subjectID);
+        teacher.setSubjectID(subjectBUS.getSubjectByName(subjectCombobox.getSelectedItem().toString()).getSubjectID());
         return teacher;
     }
 
-    // lấy dữ liệu 1 giáo viên được chọn truyền lên các trường dữ liệu form giáo viên
     public void setTeacherModel(Teacher teacher) {
         txtTeacherID.setText(teacher.getTeacherID());
         txtTeacherName.setText(teacher.getTeacherName());
@@ -882,9 +824,7 @@ public class TeacherPanel extends javax.swing.JPanel {
         btnAddTeacher.setVisible(true);
         btnEditTeacher.setVisible(false);
         resetTeacherForm();
-        subjectCombobox.enable(true);
         TeacherDialog.setVisible(true);
-
     }//GEN-LAST:event_btnShowTeacherDialogActionPerformed
 
     private void lbImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbImageMouseClicked
@@ -918,7 +858,6 @@ public class TeacherPanel extends javax.swing.JPanel {
             TeacherDialog.setLocationRelativeTo(null);
             btnAddTeacher.setVisible(false);
             btnEditTeacher.setVisible(true);
-            subjectCombobox.enable(false);
             TeacherDialog.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn giáo viên cần sửa");
@@ -993,105 +932,6 @@ public class TeacherPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_editAssignmentBtnActionPerformed
 
-    // Hàm mở file
-    public void openFile(String file) {
-        try {
-            File path = new File(file);
-            Desktop.getDesktop().open(path);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    // hàm export danh sách giáo viên
-    private void btnExportExcelTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelTeacherActionPerformed
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Học Sinh");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < teacherList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(teacherList.getColumnName(i));
-                }
-                for (int i = 0; i < teacherList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < teacherList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (teacherList.getValueAt(i, j) != null) {
-                            cell.setCellValue(teacherList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportExcelTeacherActionPerformed
-
-    private void deleteAssignementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAssignementActionPerformed
-        TeachingAssignment assignment = getAssignmentModel();
-        try {
-            if (tcBUS.deleteTeachingAssignmentByID(assignment.getId())) {
-                JOptionPane.showMessageDialog(this, "Xóa thành công");
-                loadDataTableAssignment();
-            } else {
-                JOptionPane.showMessageDialog(this, "Xóa thất bại");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(TeacherPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_deleteAssignementActionPerformed
-
-    private void btnExportExcelTeacher1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelTeacher1ActionPerformed
-        // TODO add your handling code here:
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Học Sinh");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < teachingAssignmentList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(teachingAssignmentList.getColumnName(i));
-                }
-                for (int i = 0; i < teachingAssignmentList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < teachingAssignmentList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (teachingAssignmentList.getValueAt(i, j) != null) {
-                            cell.setCellValue(teachingAssignmentList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportExcelTeacher1ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog AssignmentDialog;
@@ -1102,8 +942,6 @@ public class TeacherPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnEditTeacher;
     private javax.swing.JButton btnEsc;
     private javax.swing.JButton btnEsc1;
-    private javax.swing.JButton btnExportExcelTeacher;
-    private javax.swing.JButton btnExportExcelTeacher1;
     private javax.swing.JButton btnShowEditTeacherDialog;
     private javax.swing.JButton btnShowTeacherDialog;
     private javax.swing.ButtonGroup buttonGroup1;

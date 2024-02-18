@@ -18,7 +18,7 @@ public class DatabaseConnection {
         try {
             // Đăng ký driver
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            this.conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=SMS_Java;user=sa;password=123456@@;serverTimezone=UTC");
+            this.conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=SMSF;user=sa;password=Forever1@;serverTimezone=UTC");
             System.out.println("Kết nối thành công" + this.conn.getCatalog());
 
         } catch (ClassNotFoundException ex) {

@@ -7,10 +7,8 @@ package GUI;
 import BUS.ClassBUS;
 import BUS.StudentBUS;
 import DTO.Student;
-import java.awt.Desktop;
 import java.awt.Image;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.imageio.ImageIO;
@@ -19,11 +17,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -68,6 +61,8 @@ public class StudentPanel extends javax.swing.JPanel {
         comboboxClass.setModel(comboCurrentClass);
     }
 
+    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -108,7 +103,6 @@ public class StudentPanel extends javax.swing.JPanel {
         btnShowStudentDialog = new javax.swing.JButton();
         btnShowEditDialog = new javax.swing.JButton();
         btnDeleteStudent = new javax.swing.JButton();
-        btnExportStudent = new javax.swing.JButton();
 
         StudentFormDialog.setMinimumSize(new java.awt.Dimension(462, 490));
         StudentFormDialog.setModal(true);
@@ -386,13 +380,6 @@ public class StudentPanel extends javax.swing.JPanel {
             }
         });
 
-        btnExportStudent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/XLS.png"))); // NOI18N
-        btnExportStudent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportStudentActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -404,8 +391,6 @@ public class StudentPanel extends javax.swing.JPanel {
                 .addComponent(btnShowEditDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnDeleteStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExportStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -414,8 +399,7 @@ public class StudentPanel extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnShowEditDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeleteStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnShowStudentDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExportStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnShowStudentDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -462,9 +446,7 @@ public class StudentPanel extends javax.swing.JPanel {
         resetStudentForm();
         btnAddStudent.setVisible(true);
         btnEditStudent.setVisible(false);
-        txtStudentID.enable(true);
         StudentFormDialog.setVisible(true);
-
     }//GEN-LAST:event_btnShowStudentDialogActionPerformed
 
     private void btnShowEditDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowEditDialogActionPerformed
@@ -473,7 +455,6 @@ public class StudentPanel extends javax.swing.JPanel {
             StudentFormDialog.setLocationRelativeTo(null);
             btnAddStudent.setVisible(false);
             btnEditStudent.setVisible(true);
-            txtStudentID.enable(false);
             StudentFormDialog.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn học sinh cần sửa");
@@ -485,10 +466,11 @@ public class StudentPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         if (validateStudentForm()) {
             Student student = getStudentModel();
-            if (studentBUS.deleteStudent(student.getStudentID())) {
+            if(studentBUS.deleteStudent(student.getStudentID())) {
                 JOptionPane.showMessageDialog(this, "Xóa thành công");
                 loadDataStudentTable();
-            } else {
+            }
+            else {
                 JOptionPane.showMessageDialog(this, "Xóa thất bại");
             }
         } else {
@@ -522,11 +504,7 @@ public class StudentPanel extends javax.swing.JPanel {
 
     public Student getStudentModel() {
         Student student = new Student();
-        if (txtStudentID.getText().startsWith("HS")) {
-            student.setStudentID(txtStudentID.getText());
-        } else {
-            JOptionPane.showMessageDialog(this, "Mã phải bắt đầu bằng HS VD: HS00x");
-        }
+        student.setStudentID(txtStudentID.getText());
         student.setStudentName(txtStudentName.getText());
         student.setEmail(txtEmail.getText());
         student.setPhone(txtPhone.getText());
@@ -588,10 +566,10 @@ public class StudentPanel extends javax.swing.JPanel {
                     DTO.Class class1 = classBUS.getClassByID(classID);
                     int count = class1.getQuantity();
                     count += 1;
-                    if (classBUS.updateQuantity(count, classID)) {
+                    if(classBUS.updateQuantity(count, classID)) {
                         JOptionPane.showMessageDialog(this, "Cap nhat thanh cong");
                     } else {
-                        JOptionPane.showMessageDialog(this, "Thất bại");
+                        JOptionPane.showMessageDialog(this, "Thaast baij");
                     }
                     loadDataStudentTable();
                 } else {
@@ -609,14 +587,8 @@ public class StudentPanel extends javax.swing.JPanel {
         if (validateStudentForm()) {
             try {
                 Student student = getStudentModel();
-                Student before = studentBUS.getStudentByID(student.getStudentID());
-                DTO.Class beforeClass = classBUS.getClassByID(before.getClassID());
-                classBUS.updateQuantity(beforeClass.getQuantity() - 1, beforeClass.getClassID());
-
-                DTO.Class afterClass = classBUS.getClassByID(student.getClassID());
                 if (studentBUS.editStudent(student)) {
                     JOptionPane.showMessageDialog(this, "Sửa thành công");
-                    classBUS.updateQuantity(afterClass.getQuantity() + 1, afterClass.getClassID());
                     loadDataStudentTable();
                 } else {
                     JOptionPane.showMessageDialog(this, "Sửa thất bại");
@@ -662,51 +634,6 @@ public class StudentPanel extends javax.swing.JPanel {
         setStudentModel(student);
     }//GEN-LAST:event_studentListMouseClicked
 
-    public void openFile(String file) {
-        try {
-            File path = new File(file);
-            Desktop.getDesktop().open(path);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-    private void btnExportStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportStudentActionPerformed
-        // TODO add your handling code here:
-        try {
-            JFileChooser choose = new JFileChooser();
-            choose.showOpenDialog(JOptionPane.getRootFrame());
-            File save = choose.getSelectedFile();
-            if (save != null) {
-                save = new File(save.toString() + ".xlsx");
-                Workbook wb = new XSSFWorkbook();
-                Sheet sheet = (Sheet) wb.createSheet("Học Sinh");
-                Row rowcol = sheet.createRow(0);
-                for (int i = 0; i < studentList.getColumnCount(); i++) {
-                    Cell cell = rowcol.createCell(i);
-                    cell.setCellValue(studentList.getColumnName(i));
-                }
-                for (int i = 0; i < studentList.getRowCount(); i++) {
-                    Row row = sheet.createRow(i + 1);
-                    for (int j = 0; j < studentList.getColumnCount(); j++) {
-                        Cell cell = row.createCell(j);
-                        if (studentList.getValueAt(i, j) != null) {
-                            cell.setCellValue(studentList.getValueAt(i, j).toString());
-                        }
-                    }
-                }
-                FileOutputStream out = new FileOutputStream(new File(save.toString()));
-                wb.write(out);
-                wb.close();
-                out.close();
-                openFile(save.toString());
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al genera");
-            }
-        } catch (Exception u) {
-            u.printStackTrace();
-        }
-    }//GEN-LAST:event_btnExportStudentActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog StudentFormDialog;
@@ -714,7 +641,6 @@ public class StudentPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnDeleteStudent;
     private javax.swing.JButton btnEditStudent;
     private javax.swing.JButton btnEsc1;
-    private javax.swing.JButton btnExportStudent;
     private javax.swing.JButton btnShowEditDialog;
     private javax.swing.JButton btnShowStudentDialog;
     private javax.swing.ButtonGroup buttonGroup1;

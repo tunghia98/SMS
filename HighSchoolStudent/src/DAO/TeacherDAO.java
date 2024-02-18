@@ -30,7 +30,7 @@ public class TeacherDAO extends DatabaseConnection {
                 teacher.setPhone(rs.getString("Phone"));
                 teacher.setEmail(rs.getString("Email"));
                 teacher.setAddress(rs.getString("Address"));
-                teacher.setStatus(rs.getInt("Status"));
+                teacher.setStatus(rs.getString("Status"));
                 teacher.setImage(rs.getString("Image"));
                 teacher.setSubjectID(rs.getString("Subject_ID"));
                 teacherList.add(teacher);
@@ -72,35 +72,6 @@ public class TeacherDAO extends DatabaseConnection {
         }
         return result;
     }
-    
-    
-    public boolean addTeacherWithoutImage(Teacher teacher) {
-        Boolean result = false;
-        open();
-        String sql = "INSERT INTO [Teacher] (Teacher_ID, Teacher_Name, status, Subject_ID) VALUES (?, ?, ?, ?)";
-        try {
-            PreparedStatement pstm = conn.prepareStatement(sql);
-            pstm.setString(1, teacher.getTeacherID());
-            pstm.setString(2, teacher.getTeacherName());
-//            pstm.setString(3, teacher.getDateOfBirth());
-//            pstm.setString(4, teacher.getGender());
-//            pstm.setString(5, teacher.getPhone());
-//            pstm.setString(6, teacher.getEmail());
-//            pstm.setString(7, teacher.getAddress());
-            pstm.setInt(8, 1);
-            pstm.setString(9, teacher.getSubjectID());
-            int n = pstm.executeUpdate();
-            if (n > 0) {
-                result = true;
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error : " + ex.toString());
-        } finally {
-            close();
-        }
-        return result;
-    }
-    
 
     public boolean editTeacher(Teacher teacher) {
         Boolean result = false;

@@ -77,17 +77,20 @@ public class TeachingAssignmentBUS {
         }
     }
 
-    public boolean deleteTeachingAssignmentByID(String id) throws SQLException {
+    public String deleteTeachingAssignmentByID(String id) throws SQLException {
         boolean isExist = teachingAssignmentDAO.checkTeachingAssignmentExistById(id);
         if (isExist) {
             boolean isDeleted = teachingAssignmentDAO.deleteTeachingAssignmentByID(id);
             if (isDeleted) {
-                return true;
+                new AlertWarning("Đã xóa " + id + " thành công!").setVisible(true);
+                return "Delete thanh cong";
             } else {
-                return false;
+                new AlertWarning("Xóa " + id + "không thành công!").setVisible(true);
+                return "Delete khong thanh cong";
             }
         } else {
-            return true;
+            new AlertWarning("id = " + id + " đã không được tìm thấy").setVisible(true);
+            return "khong tim thay";
         }
     }
 

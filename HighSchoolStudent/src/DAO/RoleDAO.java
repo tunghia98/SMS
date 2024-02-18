@@ -48,7 +48,7 @@ public class RoleDAO extends DatabaseConnection {
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, role.getRoleID());
             pstm.setString(2, role.getRoleName());
-            pstm.setInt(3, 1);
+            pstm.setInt(3, role.getStatus());
 
             int n = pstm.executeUpdate();
             if (n > 0) {

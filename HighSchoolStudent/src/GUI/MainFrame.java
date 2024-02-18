@@ -6,7 +6,6 @@ package GUI;
 
 import BUS.FunctionBUS;
 import BUS.PermissionDetailBUS;
-import BUS.RoleBUS;
 import BUS.TeacherBUS;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -19,7 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.BorderUIResource;
-import org.apache.poi.examples.xslf.PieChartDemo;
 
 /**
  *
@@ -27,11 +25,10 @@ import org.apache.poi.examples.xslf.PieChartDemo;
  */
 public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
-    ClassGradePanel classGradePanel = new ClassGradePanel();
+    ContentPanel contentPanel = new ContentPanel();
     PermissionDetailBUS perMissionDetailBUS = new PermissionDetailBUS();
     FunctionBUS functionBUS = new FunctionBUS();
     TeacherBUS teacherBUS = new TeacherBUS();
-    RoleBUS roleBUS = new RoleBUS();
 
     public String roleID;
     public String userID;
@@ -39,17 +36,13 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
     public MainFrame() {
 
         initComponents();
-        currentPanel.add(classGradePanel);
+        currentPanel.add(contentPanel);
 
     }
 
     public MainFrame(String rID, String uID, ArrayList<String> functionList) {
         initComponents();
-        // lấy ra tên quyền từ mã quyền
-        String roleName = roleBUS.getRoleByID(rID).getRoleName();
-        // gán vào label
-        labelUsername.setText(teacherBUS.getTeacherByID(uID).getTeacherName() + " - nhóm quyền: " + roleName);
-
+        labelUsername.setText(teacherBUS.getTeacherByID(uID).getTeacherName());
         for (String x : functionList) {
             String functionName = functionBUS.getFunctionByID(x).getFunctionName();
             JButton button = new JButton(functionName);
@@ -84,9 +77,6 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                 } else if (button.getText().equals(("Hoạt Động"))) {
                     ImageIcon icon = new ImageIcon(getClass().getResource("/media/Activity.png"));
                     button.setIcon(icon);
-                } else if (button.getText().equals("Thống Kê")) {
-                    ImageIcon icon = new ImageIcon(getClass().getResource("/media/Pie Chart.png"));
-                    button.setIcon(icon);
                 }
             } catch (Exception e) {
                 System.out.println(e.toString());
@@ -96,12 +86,25 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         }
         roleID = rID;
         userID = uID;
+        JButton button = new JButton("Đăng Xuất");
+        button.setPreferredSize(new Dimension(168, 55));
+
+        sidebar.add(button);
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource("/media/Logout.png"));
+            button.setIcon(icon);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
+        button.addActionListener(this);
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String src = e.getActionCommand();
+        JOptionPane.showMessageDialog(this, src);
         if (src.equals("Học Sinh")) {
             ImageIcon icon = new ImageIcon("D:/JAVA/Java_Workspace/HighSchoolStudent/media/ICON/Student Male.png");
             StudentPanel studentPanel = new StudentPanel();
@@ -175,15 +178,9 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             currentPanel.add(frame);
             currentPanel.repaint();
             currentPanel.revalidate();
-
-        } else if (src.equals("Thống Kê")) {
-            PieChartGUI chartGUI = new PieChartGUI();
-            currentPanel.removeAll();
-            currentPanel.repaint();
-            currentPanel.revalidate();
-            currentPanel.add(chartGUI);
-            currentPanel.repaint();
-            currentPanel.revalidate();
+        } else if (src.equals("Đăng Xuất")) {
+            this.dispose();
+            new LoginGUI().setVisible(true);
         }
 
     }
@@ -201,7 +198,6 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         header = new javax.swing.JPanel();
         labelUsername = new javax.swing.JLabel();
         btnThoat = new javax.swing.JButton();
-        btnLogout = new javax.swing.JButton();
         currentPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -217,10 +213,9 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
         labelUsername.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         labelUsername.setForeground(new java.awt.Color(255, 255, 255));
-        labelUsername.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        labelUsername.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelUsername.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Remembear.png"))); // NOI18N
         labelUsername.setText("Username: ");
-        labelUsername.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         btnThoat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/TwitterX.png"))); // NOI18N
         btnThoat.addActionListener(new java.awt.event.ActionListener() {
@@ -229,40 +224,23 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             }
         });
 
-        btnLogout.setBackground(new java.awt.Color(204, 0, 204));
-        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/smallKhanAcademy.png"))); // NOI18N
-        btnLogout.setText("Đăng Xuất");
-        btnLogout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogoutActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
         header.setLayout(headerLayout);
         headerLayout.setHorizontalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(labelUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(labelUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 56, Short.MAX_VALUE)
             .addGroup(headerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(headerLayout.createSequentialGroup()
-                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         currentPanel.setLayout(new java.awt.CardLayout());
@@ -300,12 +278,6 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         this.dispose();
     }//GEN-LAST:event_btnThoatActionPerformed
 
-    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        new LoginGUI().setVisible(true);
-        this.dispose();
-
-    }//GEN-LAST:event_btnLogoutActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -342,7 +314,6 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnThoat;
     private javax.swing.JPanel currentPanel;
     private javax.swing.JPanel header;
